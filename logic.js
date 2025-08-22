@@ -80,28 +80,39 @@ function minimax(board, depth, isMaximizing) {
         return bestScore;
     }
 }
-
 function aiMove() {
-    let bestScore = -Infinity;
-    let bestMove;
-    for (let i = 0; i < 9; i++) {
-        if (gameBoard[i] === '') {
-            gameBoard[i] = 'O';
-            let score = minimax(gameBoard, 0, false);
-            gameBoard[i] = '';
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = i;
+    if (Math.random() < 0.2) {
+        let emptyCells = [];
+        for (let i = 0; i < 9; i++) {
+            if (gameBoard[i] === '') emptyCells.push(i);
+        }
+        let randomMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        gameBoard[randomMove] = 'O';
+        cells[randomMove].textContent = 'O';
+    } else {
+        let bestScore = -Infinity;
+        let bestMove;
+        for (let i = 0; i < 9; i++) {
+            if (gameBoard[i] === '') {
+                gameBoard[i] = 'O';
+                let score = minimax(gameBoard, 0, false);
+                gameBoard[i] = '';
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = i;
+                }
             }
         }
+        gameBoard[bestMove] = 'O';
+        cells[bestMove].textContent = 'O';
     }
-    gameBoard[bestMove] = 'O';
-    cells[bestMove].textContent = 'O';
+
     currentPlayer = 'X';
     const result = checkWinner(gameBoard);
     updateStatus(result);
     if (result) gameActive = false;
 }
+
 
 function handleCellClick(e) {
     const cellIndex = e.target.getAttribute('data-index');
